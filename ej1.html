@@ -9,22 +9,28 @@
         * {
             margin: 0px;
             padding: 0px;
+            box-sizing: border-box;
         }
         html, body {
             height: 100%;
         }
         .app {
             display: flex;
-            flex-direction: row;
             height: 100%;
             background-color: whitesmoke;
         }
         .app > div:first-child {
-            background-color: blue;
+            width: 250px;
+            box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
+            background-color: #222222;
+            z-index: 1;
+            color: whitesmoke;
+            padding: 40px;
         }
 
         .app > div:last-child {
-            background-color: coral;
+            width: calc(100% - 250px);
+            padding: 100px;
         }
     </style>
 </head>
