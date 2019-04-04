@@ -44,7 +44,7 @@
         .app > div:first-child li:hover {
             cursor: pointer;
             /* background-color: #999999; */
-            border-bottom: 1px solid hotpink;
+            border-bottom: 1px solid cornflowerblue;
             color: whitesmoke;
         }
 
@@ -52,7 +52,6 @@
             display: flex;
             flex-direction: column;
             width: calc(100% - 250px);
-            background-color: aliceblue;
             padding: 20px;
         }
 
@@ -84,7 +83,7 @@
         
         .app > div:last-child > div:last-child table th {
             text-align: center;
-            background-color: hotpink;
+            background-color: cornflowerblue;
         }
         
         .app > div:last-child > div:last-child table th, td {
@@ -94,6 +93,23 @@
         
         .app > div:last-child > div:last-child table tr:nth-child(even) {
             background-color: lightgray;
+        }
+        
+        .app > div:last-child > div:last-child table tr:hover {
+            background-color: orange;
+            cursor: pointer;
+        }
+
+        .modal {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            top: calc(50% - 150px);
+            left: calc(50% - 150px);
+            background-color: white;
+            border-radius: 10px;
+            border: 1px solid black;
+            padding: 40px;
         }
     </style>
 </head>
@@ -191,5 +207,55 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Javascript ES6
+        const rows = document.querySelectorAll("tbody > tr");
+
+        const model = ["nombre", "apellidos", "salario", "genero"];
+
+        for (let row of rows) {
+            row.addEventListener("click", () => {
+                const empleado = [...row.children].reduce((empleado, td, index) => {
+                    empleado[model[index]] = td.innerText;
+                    return empleado;
+                },  {});
+                console.log(empleado);
+                mostrar_empleado(empleado);
+            });
+        }
+
+        function mostrar_empleado(empleado) {
+            if (window.currentModal) {
+                window.currentModal = null;
+            }
+
+            const div = document.createElement("div");
+            div.className = `modal ${empleado.genero}`;
+            div.innerHTML = `
+                <p>Nombre: ${empleado.nombre} ${empleado.apellidos}</p>
+                <p>Salario: ${empleado.salario}</p>
+                <p>Genero: ${empleado.genero}</p>
+            `;
+            window.lock = true;
+            setTimeout(() => {
+                window.lock = false;
+            }, 100);
+            document.body.appendChild(div);
+            window.currentModal = div;
+            div.dataset.removable = true;
+        }
+
+        window.onclick = e => {
+            if (window.lock || !window.currentModal) {
+                return;
+            }
+            window.lock = true;
+            setTimeout(() => {
+                window.lock = false;
+            }, 100);
+            document.body.removeChild(window.currentModal);
+        };
+    </script>
 </body>
 </html>
