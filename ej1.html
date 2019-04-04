@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejemplo 1 - HTML CSS JS</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+        html, body {
+            height: 100%;
+        }
+        .app {
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+            background-color: whitesmoke;
+        }
+        .app > div:first-child {
+            background-color: blue;
+        }
+
+        .app > div:last-child {
+            background-color: coral;
+        }
+    </style>
+</head>
+<body>
+    <!-- div: caja -->
+    <!-- ul: lista no numerada -->
+    <!-- li: elemento de lista -->
+    <!-- img: coloca imagen -->
+    <!-- span: coloca un texto -->
+    <!-- table: coloca una tabla -->
+    <!-- thead: define la región para las cabeceras de una tabla -->
+    <!-- tbody: define la región para las filas de una tabla -->
+    <!-- tr: define una fila en la tabla (puede ser cabecera o de datos) -->
+    <!-- th: define una celda de fila de la cabecera -->
+    <!-- td: define una celda de datos para la fila de datos -->
+
+    <div class="app">
+        <div>
+            <!-- menu -->
+            <ul>
+                <li>Inicio</li>
+                <li>Clientes</li>
+                <li>Productos</li>
+                <li>Proveedores</li>
+                <li>Empleados</li>
+            </ul>
+        </div>
+        <div>
+            <div>
+                <div>
+                    <!-- imagen -->
+                    <img src="http://placehold.it/150" alt="imagen falsa">
+                </div>
+                <div>
+                    <!-- texto -->
+                    <span>Alan Badillo Salas (badillo.soft@hotmail.com)</span>
+                </div>
+            </div>
+            <div>
+                <!-- dashboard -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Salario</th>
+                            <th>Género</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ana</td>
+                            <td>Benítez Castro</td>
+                            <td>$12,500.00</td>
+                            <td>Mujer</td>
+                        </tr>
+                        <tr>
+                            <td>Daniel</td>
+                            <td>Espinoza Fuentes</td>
+                            <td>$12,500.00</td>
+                            <td>Hombre</td>
+                        </tr>
+                        <tr>
+                            <td>Gabriela</td>
+                            <td>Hernández Iturbide</td>
+                            <td>$12,500.00</td>
+                            <td>Mujer</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
