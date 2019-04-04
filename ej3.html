@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejercicio 3 - Modelos en Backbone</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <script>
+        const Cliente = Backbone.Model.extend({
+            pagar(monto) {
+                if (monto <= 0) {
+                    alert(`El cliente ${this.attributes.nombre} no puede pagar ese monto ($${monto})`);
+                    return;
+                }
+                this.set({
+                    montoPagado: monto,
+                    estatusPagado: true
+                });
+            }
+        });
+
+        const pepe = new Cliente({
+            id: 123,
+            nombre: "Pepe",
+            correo: "pepe@gmail.com",
+            direccion: "Av. Siempre Viva 123"
+        });
+
+        const ana = new Cliente({
+            id: 123,
+            nombre: "Ana",
+            correo: "ana@hotmail.com",
+            direccion: "Calle Sin nombre S/N"
+        });
+
+        console.log(pepe);
+        console.log(ana);
+
+        pepe.on("change", function(result) {
+            alert("Pepe ha cambiado");
+        });
+
+        pepe.pagar(-10);
+
+        pepe.set("direccion", "Otra");
+
+        ana.pagar(0);
+    </script>
+</body>
+</html>

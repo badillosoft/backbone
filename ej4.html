@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejemplo 4 - Vistas en Backbone</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <img id="mi-imagen" src="http://placehold.it/300" alt="Sin imagen">
+    <script>
+        const URL = Backbone.Model.extend({});
+
+        const modelURL = new URL({
+            url: "http://gregfranko.com/images/backbone.png"
+        });
+
+        const Image = Backbone.View.extend({
+            el: "#mi-imagen",
+            model: modelURL,
+            initialize() {
+                this.listenTo(modelURL, "change", this.render);
+            },
+            render() {
+                this.el.src = this.model.attributes.url;
+                return this;
+            }
+        });
+
+        new Image().render();
+
+        setInterval(function () {
+            modelURL.set("url", `http://placehold.it/${Math.floor(Math.random() * 400 + 200)}`);
+        }, 1000);
+    </script>
+</body>
+</html>

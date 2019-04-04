@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejemplo 2 - Eventos en Backbone</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <input onkeyup="textChange(event)" placeholder="Escribe algo aquí" style="width: 300px; padding: 10px;">
+
+    <button onclick="buscar('perro')">buscar perritos</button>
+    <button onclick="buscar('gato')">buscar gatitos</button>
+
+    <script>
+        const eventHandler = _.extend({}, Backbone.Events);
+
+        function textChange(event) {
+            if (event.key === "Enter") {
+                console.log(event.target.value);
+                eventHandler.trigger("search", event.target.value);
+            }
+        }
+
+        function buscar(texto) {
+            eventHandler.trigger("search", texto);
+        }
+
+        eventHandler.on("search", function (query) {
+            alert(query);
+        });
+    </script>
+</body>
+</html>
