@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Proyecto 1 - Selector de Frutas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <script>
+        const Canasta = Backbone.Model.extend({
+            defaults: {
+                frutaSeleccionada: null,
+                frutas: []
+            },
+            agregarFruta(nombre) {
+                const frutas = this.get("frutas").slice(); // [...]
+                frutas.push(nombre); // [..., nombre]
+                this.set("frutas", frutas); // { frutas: [..., nombre], ... }
+            },
+            seleccionarFruta(nombre) {
+                this.set("frutaSeleccionada", nombre);
+            }
+        });
+
+        const VistaSeleccionarFruta = Backbone.View.extend({
+            template: _.template(`
+                <select>
+                    <% for (let fruta of frutas) { %>
+                        <option><%= fruta %></option>
+                    <% } %>
+                </select>
+            `),
+            events: {
+                "change select": "seleccionarFruta",
+            },
+            initialize() {
+                this.$el.appendTo(document.body);
+                this.listenTo(this.model, "change:frutas", this.render);
+                this.render();
+            },
+            render() {
+                this.$el.html(this.template(this.model.toJSON()));
+            },
+            seleccionarFruta() {
+                const nombre = this.$("select").val();
+                this.model.seleccionarFruta(nombre);
+            },
+        });
+        
+        const VistaMostrarFrutaSeleccionada = Backbone.View.extend({
+            template: _.template(`
+                <p>Fruta: <%= frutaSeleccionada %></p> 
+            `),
+            initialize() {
+                this.$el.appendTo(document.body);
+                this.listenTo(this.model, "change:frutaSeleccionada", this.render);
+                this.render();
+            },
+            render() {
+                this.$el.html(this.template(this.model.toJSON()));
+            },
+        });
+
+        const VistaAgregarFruta = Backbone.View.extend({
+            template: _.template(`
+                <input placeholder="Agrega una fruta (pulsa enter)">
+            `),
+            events: {
+                "keyup input": "agregarFruta",
+            },
+            initialize() {
+                this.$el.appendTo(document.body);
+                this.render();
+            },
+            render() {
+                this.$el.html(this.template(this.model.toJSON()));
+            },
+            agregarFruta(e) {
+                if (e.key === "Enter") {
+                    const nombre = this.$("input").val();
+                    this.model.agregarFruta(nombre);
+                    this.$("input").val("");
+                }
+            }
+        });
+
+        const canasta1 = new Canasta({
+            frutas: ["manzana", "pera", "kiwi"],
+            frutaSeleccionada: "manzana"
+        });
+
+        const vistaSeleccionarFruta1 = new VistaSeleccionarFruta({
+            model: canasta1
+        });
+
+        const vistaMostrarFrutaSeleccionada1 = new VistaMostrarFrutaSeleccionada({
+            model: canasta1
+        });
+        
+        const vistaMostrarFrutaSeleccionada2 = new VistaMostrarFrutaSeleccionada({
+            model: canasta1
+        });
+
+        const vistaAgregarFruta1 = new VistaAgregarFruta({
+            model: canasta1
+        });
+    </script>
+</body>
+</html>
