@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejemplo 6 - Contador v2</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <div id="contador1">
+        <h1 class="titulo">Contador 1</h1>
+        <p class="pantalla">AQUI VA EL DISPLAY DEL CONTADOR 1</p>
+        <button class="iniciar">Iniciar</button>
+        <button class="detener">Detener</button>
+        <button class="reiniciar">Reiniciar</button>
+    </div>
+    <div id="contador2">
+        <h1 class="titulo">Contador 2</h1>
+        <p class="pantalla">AQUI VA EL DISPLAY DEL CONTADOR 2</p>
+        <button class="iniciar">Iniciar</button>
+        <button class="detener">Detener</button>
+        <button class="reiniciar">Reiniciar</button>
+    </div>
+
+    <script>
+        const Contador = Backbone.Model.extend({
+            defaults: {
+                id: null,
+                segundos: 0,
+                minutos: 0
+            },
+            incrementar() {
+                let segundos = this.get("segundos") + 1;
+                let minutos = this.get("minutos");
+                if (segundos === 60) {
+                    segundos = 0;
+                    minutos += 1;
+                }
+                this.set({
+                    segundos: segundos,
+                    minutos: minutos
+                });
+            },
+            iniciar() {
+                // TODO: Verificar que el contador no este iniciado
+                // TODO: Si el contador ya está iniciado mostrar una alerta
+                const id = setInterval(() => {
+                    this.incrementar();
+                }, 1000);
+                this.set("id", id);
+            },
+            detener() {
+                // TODO: Verificar que el contador esté iniciado
+                // TODO: Si el contador no está iniciado mostrar una alerta
+                const id = this.get("id");
+                clearInterval(id);
+            },
+            reiniciar() {
+                this.detener();
+                this.set({
+                    segundos: 0,
+                    minutos: 0
+                });
+            },
+            display() {
+                return `${this.get("minutos")}:${this.get("segundos")}`;
+            }
+        });
+
+        const contador1 = new Contador();
+        const contador2 = new Contador({
+            segundos: 45,
+            minutos: 3
+        });
+
+        contador1.on("change", function () {
+            $("#contador1 .pantalla").text(contador1.display());
+        });
+
+        $("#contador1 .iniciar").on("click", function () {
+            contador1.iniciar();
+        });
+        
+        $("#contador1 .detener").on("click", function () {
+            contador1.detener();
+        });
+        
+        $("#contador1 .reiniciar").on("click", function () {
+            contador1.reiniciar();
+        });
+    </script>
+</body>
+</html>

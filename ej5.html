@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejemplo 5 - Contador v1</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <script>
+        // ES6 - ECMA 2015
+
+        // "1" == 1 (true)
+        // "1" === 1 (false)
+
+        // model.attributes - retiene el estado del modelo
+        // model.set(key, value) - ajusta el estado del modelo para la clave key con value
+        // model.set({ <key>: <value> }) - ajusta el estado del modelo para todas las claves
+        // model.attributes.<key> - asigna o recupera el estado en la clave key de forma insegura
+        // => No se emite ninguna notificación que el modelo ha cambiado
+        // mode.get(key) - recupera el estado del modelo en la clave key
+        const Contador = Backbone.Model.extend({
+            defaults: {
+                id: null,
+                segundos: 0,
+                minutos: 0
+            },
+            incrementar() {
+                let segundos = this.get("segundos") + 1;
+                let minutos = this.get("minutos");
+                if (segundos === 60) {
+                    segundos = 0;
+                    minutos += 1;
+                }
+                this.set({
+                    segundos: segundos, // segundos === segundos: segundos
+                    minutos: minutos // minutos: minutos === "minutos": minutos
+                });
+            },
+            iniciar() {
+                // this equivale al modelo (quién define/llama a la función)
+                // const self = this;
+                const id = setInterval(() => {
+                    // self.incrementar();
+                    this.incrementar();
+                }, 1000);
+                this.set("id", id);
+            },
+            detener() {
+                const id = this.get("id");
+                clearInterval(id);
+            },
+            reiniciar() {
+                this.detener();
+                this.set({
+                    segundos: 0,
+                    minutos: 0
+                });
+            },
+            display() {
+                return `${this.get("minutos")}:${this.get("segundos")}`;
+            }
+        });
+
+        const contador1 = new Contador();
+        const contador2 = new Contador({
+            segundos: 45,
+            minutos: 3
+        });
+
+        // console.log(contador1);
+        // console.log(contador2);
+
+        // console.log(contador1.display());
+        // console.log(contador2.display());
+
+        // contador1.on("change", function () {
+        //     console.log("contador1", contador1.display());
+        // });
+
+        // contador2.on("change", function () {
+        //     console.log("contador2", contador2.display());
+        // });
+
+        // contador1.iniciar();
+
+        // contador2.iniciar();
+    </script>
+</body>
+</html>
