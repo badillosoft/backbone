@@ -68,37 +68,31 @@
                 <button class="detener">Detener</button>
                 <button class="reiniciar">Reiniciar</button>
             `,
+            events: {
+                "click .iniciar": "iniciar",
+                "click .detener": "detener",
+                "click reiniciar": "reiniciar"
+            },
             initialize() {
                 // 1. Cargar la plantilla/template o el HTML
-                // 2. [Opcionalmente] montar la vista en algún lado
-                // 3. Enlazar los cambios del modelo hacia el render
-                // *4. Enlazar la funcionalidad de la vista con el modelo
-
-                console.log(this);
-                // this.$el.appendTo($("body")) | $("body").append(this.$el);
-                // this.$el | $(this.el)
                 this.$el.html(this.template);
-                
+                // 2. Montar la vista en algún lado
                 this.$el.appendTo($("body"));
-
+                // 3. Enlazar los cambios del modelo hacia el render
                 this.listenTo(this.model, "change", this.render);
-
-                // * NO AQUÍ
-                this.$(".iniciar").on("click", () => {
-                    this.model.iniciar();
-                });
-                
-                this.$(".detener").on("click", () => {
-                    this.model.detener();
-                });
-                
-                this.$(".reiniciar").on("click", () => {
-                    this.model.reiniciar();
-                });
             },
             render() {
                 this.$(".pantalla").text(this.model.display());
-            }
+            },
+            iniciar() {
+                this.model.iniciar();
+            },
+            detener() {
+                this.model.detener();
+            },
+            reiniciar() {
+                this.model.reiniciar();
+            },
         });
 
         const vista1 = new VistaContador({
