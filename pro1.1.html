@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Proyecto 1 - Selector de Frutas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <script>
+        const Canasta = Backbone.Model.extend({
+            defaults: {
+                frutaSeleccionada: null,
+                frutas: []
+            },
+            agregarFruta(nombre) {
+                const frutas = this.get("frutas"); // [...]
+                frutas.push(nombre); // [..., nombre]
+                this.set("frutas", frutas); // { frutas: [..., nombre], ... }
+            },
+            seleccionarFruta(nombre) {
+                this.set("frutaSeleccionada", nombre);
+            }
+        });
+
+        const VistaCanasta = Backbone.View.extend({
+            template: _.template(`
+                <input placeholder="Agrega una fruta (pulsa enter)">
+                <select>
+                    <% for (let fruta of frutas) { %>
+                        <option><%= fruta %></option>
+                    <% } %>
+                </select>
+                <p>Fruta: <%= frutaSeleccionada %></p> 
+            `),
+            events: {
+                "change select": "seleccionarFruta"
+            },
+            initialize() {
+                this.$el.appendTo(document.body);
+                this.listenTo(this.model, "change", this.render);
+                this.render();
+            },
+            render() {
+                this.$el.html(this.template(this.model.toJSON()));
+            },
+            seleccionarFruta() {
+                const nombre = this.$("select").val();
+                this.model.seleccionarFruta(nombre);
+            }
+        });
+
+        const canasta1 = new Canasta({
+            frutas: ["manzana", "pera", "kiwi"],
+            frutaSeleccionada: "manzana"
+        });
+
+        const vista1 = new VistaCanasta({
+            model: canasta1
+        });
+    </script>
+</body>
+</html>

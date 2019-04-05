@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ejemplo 7 - Contador v3</title>
+    <title>Ejemplo 8 - Contador v4</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
@@ -69,6 +69,7 @@
                 <button class="reiniciar">Reiniciar</button>
             `,
             events: {
+                "click .pantalla": "mostrar",
                 "click .iniciar": "iniciar",
                 "click .detener": "detener",
                 "click reiniciar": "reiniciar"
@@ -83,6 +84,9 @@
             },
             render() {
                 this.$(".pantalla").text(this.model.display());
+            },
+            mostrar(evento) {
+                console.log(evento);
             },
             iniciar() {
                 this.model.iniciar();
