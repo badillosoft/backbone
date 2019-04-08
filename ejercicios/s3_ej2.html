@@ -75,6 +75,20 @@
             }
         });
 
+        const VistaCanastaFrutaSeleccionada = Backbone.View.extend({
+            template: _.template(`
+                <p>Fruta Seleccionada</p>
+                <p> <%= nombre %> </p>
+            `),
+            initialize() {
+                this.listenTo(this.model, "change:nombre", this.render);
+                this.render();
+            },
+            render() {
+                this.$el.html(this.template(this.model.toJSON()));
+            }
+        });
+
         const canasta = new Canasta();
 
         canasta.add(new Fruta({ nombre: "Manzana" }));
@@ -92,8 +106,13 @@
             collection: canasta
         });
 
+        const vistaCanastaFrutaSeleccionada = new VistaCanastaFrutaSeleccionada({
+            model: frutaSeleccionada
+        });
+
         document.body.append(vistaCanastaAgregarFruta.el);
         document.body.append(vistaCanasta.el);
+        document.body.append(vistaCanastaFrutaSeleccionada.el);
 
         // alert(canasta.some(function (fruta) {
         //     const nombre = fruta.get("nombre");
