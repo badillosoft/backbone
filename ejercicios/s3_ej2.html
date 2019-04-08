@@ -23,10 +23,13 @@
             template: _.template(`
                 <ul>
                     <% for (let fruta of frutas) { %>
-                        <li> <%= fruta.get("nombre") %> </li>
+                        <li id="<%= fruta.cid %>" > <%= fruta.get("nombre") %> </li>
                     <% } %>
                 </ul>
             `),
+            events: {
+                "click li": "seleccionarFruta"
+            },
             initialize() {
                 this.listenTo(this.collection, "update", this.render);
                 this.render();
@@ -35,6 +38,13 @@
                 this.$el.html(this.template({
                     frutas: this.collection.toArray()
                 }));
+            },
+            seleccionarFruta(event) {
+                const li = event.target;
+                const cid = li.id;
+                const fruta = this.collection.find(fruta => fruta.cid === cid);
+                console.log("Se selección la fruta", fruta.get("nombre"));
+                this.model.set(fruta.toJSON()); // this.model es el modelo de selección (frutaSeleccionada)
             }
         });
 
@@ -71,7 +81,10 @@
         canasta.add(new Fruta({ nombre: "Pera" }));
         canasta.add(new Fruta({ nombre: "Mango" }));
 
+        const frutaSeleccionada = new Fruta();
+
         const vistaCanasta = new VistaCanasta({
+            model: frutaSeleccionada,
             collection: canasta
         });
         
