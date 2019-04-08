@@ -1,6 +1,7 @@
 const Productos = require("./colecciones/Productos");
 const Producto = require("./modelos/Producto");
 const TarjetaProducto = require("./vistas/TarjetaProducto");
+const TablaProductos = require("./vistas/TablaProductos");
 
 const productos = new Productos();
 
@@ -32,3 +33,14 @@ productos.add(new Producto({
     etiquetas: ["refresco", "pepsi", "600ml"]
 }));
 
+console.log(productos.toArray());
+
+// new TarjetaProducto({
+//     model: productos.at(2)
+// });
+
+const tablaProductos = new TablaProductos({
+    collection: productos
+});
+
+document.body.appendChild(tablaProductos.el);
