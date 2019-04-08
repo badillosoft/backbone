@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sesión 3 - Ejercicio 1 - Colecciones</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <script>
+        const Canasta = Backbone.Collection.extend();
+
+        const Fruta = Backbone.Model.extend({
+            defaults: {
+                nombre: "Manzana"
+            }
+        });
+
+        const canasta = new Canasta();
+
+        canasta.on("add", function (model) {
+            console.log("Se agregó una fruta a la canasta", model.get("nombre"));
+        });
+
+        canasta.add(new Fruta({ nombre: "Manzana" }));
+        canasta.add(new Fruta({ nombre: "Pera" }));
+        canasta.add(new Fruta({ nombre: "Kiwi" }));
+        canasta.add(new Fruta({ nombre: "Mango" }));
+        canasta.add(new Fruta({ nombre: "Pera" }));
+        canasta.add(new Fruta({ nombre: "Mango" }));
+        canasta.add(new Fruta({ nombre: "Kiwi" }));
+        canasta.add(new Fruta({ nombre: "Manzana" }));
+
+        const mango = canasta.at(3);
+
+        console.log("La fruta con índice 3 (cuarta) es", mango.get("nombre"));
+
+        const ultima = canasta.last(); // canasta.at(canasta.lenght - 1)
+
+        console.log("La última fruta es", ultima.get("nombre"));
+    </script>
+</body>
+</html>

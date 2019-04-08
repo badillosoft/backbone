@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sesión 3 - Ejercicio 1 - Colecciones</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <script>
+        const Canasta = Backbone.Collection.extend();
+
+        const Fruta = Backbone.Model.extend({
+            defaults: {
+                nombre: "Manzana"
+            }
+        });
+
+        const VistaCanasta = Backbone.View.extend({
+            template: _.template(`
+                <ul>
+                    <% for (let fruta of frutas) { %>
+                        <li> <%= fruta.get("nombre") %> </li>
+                    <% } %>
+                </ul>
+            `),
+            initialize() {
+                this.listenTo(this.collection, "update", this.render);
+                this.render();
+            },
+            render() {
+                this.$el.html(this.template({
+                    frutas: this.collection.toArray()
+                }));
+            }
+        });
+
+        const VistaCanastaAgregarFruta = Backbone.View.extend({
+            template: _.template(`
+                <input placeholder="Nombre de la fruta">
+                <button>Agregar Fruta</button>
+            `),
+            events: {
+                "keyup input": "escribirFruta",
+                "click button": "agregarFruta"
+            },
+            initialize() {
+                this.render();
+            },
+            render() {
+                this.$el.html(this.template());
+            },
+            escribirFruta(event) {
+                if (event.key === "Enter") {
+                    this.agregarFruta();
+                }
+            },
+            agregarFruta() {
+                this.collection.add(new Fruta({
+                    nombre: this.$("input").val()
+                }));
+            }
+        });
+
+        const canasta = new Canasta();
+
+        canasta.add(new Fruta({ nombre: "Manzana" }));
+        canasta.add(new Fruta({ nombre: "Pera" }));
+        canasta.add(new Fruta({ nombre: "Mango" }));
+
+        const vistaCanasta = new VistaCanasta({
+            collection: canasta
+        });
+        
+        const vistaCanastaAgregarFruta = new VistaCanastaAgregarFruta({
+            collection: canasta
+        });
+
+        document.body.append(vistaCanastaAgregarFruta.el);
+        document.body.append(vistaCanasta.el);
+
+        // alert(canasta.some(function (fruta) {
+        //     const nombre = fruta.get("nombre");
+        //     return nombre === "Kiwi";
+        // }));
+    </script>
+</body>
+</html>
