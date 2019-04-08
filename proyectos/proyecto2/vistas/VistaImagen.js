@@ -6,7 +6,7 @@ const VistaImagen = Backbone.View.extend({
         <img src='<%= url %>' >
     `),
     initialize() {
-        this.listenTo(this.model, "change", this.render);
+        this.listenTo(this.model, "change:url", this.render);
         this.render()
     },
     render() {
