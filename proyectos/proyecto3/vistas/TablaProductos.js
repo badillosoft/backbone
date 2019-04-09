@@ -13,7 +13,7 @@ module.exports = Backbone.View.extend({
             </thead>
             <tbody>
                 <% for (let producto of productos) { %>
-                    <tr>
+                    <tr data-id="<%= producto.get("id") %>">
                         <td><%= producto.get("id") %></td>
                         <td><%= producto.get("nombre") %></td>
                         <td><%= producto.get("descripcion") %></td>
@@ -25,6 +25,9 @@ module.exports = Backbone.View.extend({
             </tbody>
         </table>
     `),
+    events: {
+        "click tr": "seleccionarFila",
+    },
     initialize() {
         this.listenTo(this.collection, "update", this.render);
         this.render();
@@ -34,5 +37,10 @@ module.exports = Backbone.View.extend({
             productos: this.collection.toArray()
         }));
         this.$("table").DataTable();
+    },
+    seleccionarFila(event) {
+        const tr = event.currentTarget;
+        const id = tr.dataset.id;
+        console.log("Se seleccionó el producto", id);
     }
 });
