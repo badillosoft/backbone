@@ -14,7 +14,7 @@ module.exports = Backbone.View.extend({
             <tbody>
                 <% for (let producto of productos) { %>
                     <tr data-id="<%= producto.get("id") %>">
-                        <td><%= producto.get("id") %></td>
+                        <td class="details-control"><%= producto.get("id") %></td>
                         <td><%= producto.get("nombre") %></td>
                         <td><%= producto.get("descripcion") %></td>
                         <td><%= producto.get("precio") %></td>
@@ -31,7 +31,7 @@ module.exports = Backbone.View.extend({
         </style>
     `),
     events: {
-        "click tr": "seleccionarFila",
+        "click td a": "seleccionarFila",
     },
     initialize() {
         this.listenTo(this.collection, "update", this.render);
@@ -41,7 +41,44 @@ module.exports = Backbone.View.extend({
         this.$el.html(this.template({
             productos: this.collection.toArray()
         }));
-        this.$("table").DataTable();
+        
+        const table = this.$("table").DataTable();
+
+        function format ( d ) {
+            // `d` is the original data object for the row
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+                '<tr>'+
+                    '<td>Nombre:</td>'+
+                    '<td>'+d[1]+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>Existencias:</td>'+
+                    '<td>'+d[2]+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>Mostrar tarjeta</td>'+
+                    '<td><a data-id="'+ d[0] +'">Ver tarjeta</a></td>'+
+                '</tr>'+
+            '</table>';
+        }
+
+        this.$("table").on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+     
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                console.log(row.data());
+                row.child( format( row.data() ) ).show();
+                tr.addClass('shown');
+            }
+        } );
+
     },
     seleccionarFila(event) {
         // Recuperar la fila (tr) seleccionada del evento
