@@ -52,6 +52,20 @@ const productos = [
     },
 ];
 
+for (let i = 0; i < 100; i++) {
+    let precio = Math.random() * 900 + 100;
+    let producto = {
+        id: `producto-aleatorio-${i}`,
+        nombre: `Producto ${i}`,
+        descripcion: `Este es un producto falso con id ${i}`,
+        precio: precio.toFixed(1),
+        costo: (precio * (Math.random() * 0.3 + 0.6)).toFixed(1),
+        existencias: Math.floor(Math.random() * 1000),
+        etiquetas: ["producto", "aleatorio"]
+    };
+    productos.push(producto);
+}
+
 app.get("/productos", (req, res) => {
     res.send(productos);
 });
