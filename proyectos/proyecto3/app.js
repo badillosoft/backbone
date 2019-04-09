@@ -2,12 +2,13 @@ const Productos = require("./colecciones/Productos");
 const Producto = require("./modelos/Producto");
 const TarjetaProducto = require("./vistas/TarjetaProducto");
 const TablaProductos = require("./vistas/TablaProductos");
+const EstadisticosProductos = require("./vistas/EstadisticosProductos");
 
 // Creamos el modelo de producto Seleccionado
 const productoSeleccionado = new Producto();
 
 // Creamos la tarjeta para mostrar el producto seleccionado
-const tarjetaProductoSeleccionado = new TarjetaProducto({
+new TarjetaProducto({
     model: productoSeleccionado
 });
 
@@ -18,10 +19,13 @@ const productos = new Productos();
 productos.fetch();
 
 // Creamos la tabla de productos
-const tablaProductos = new TablaProductos({
+new TablaProductos({
+    el: "#derecha",
     collection: productos,
     model: productoSeleccionado
 });
 
-// Montamos la tabla de productos en el body
-document.body.appendChild(tablaProductos.el);
+new EstadisticosProductos({
+    el: "#izquierda",
+    collection: productos
+});

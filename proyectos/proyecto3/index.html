@@ -22,8 +22,24 @@
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/mint-choc/theme.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css">
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.jqueryui.min.js"></script> -->
+
+    <style>
+        #app {
+            display: flex;
+        }
+        #izquierda {
+            width: 250px;
+        }
+        #derecha {
+            width: calc(100% - 250px);
+        }
+    </style>
 </head>
 <body>
+    <div id="app">
+        <div id="izquierda"></div>
+        <div id="derecha"></div>
+    </div>
     <script src="bundle.js"></script>
 </body>
 </html>
