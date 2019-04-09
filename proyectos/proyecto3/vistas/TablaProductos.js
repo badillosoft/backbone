@@ -24,6 +24,11 @@ module.exports = Backbone.View.extend({
                 <% } %>
             </tbody>
         </table>
+        <style>
+            tr {
+                cursor: pointer;
+            }
+        </style>
     `),
     events: {
         "click tr": "seleccionarFila",
@@ -39,8 +44,19 @@ module.exports = Backbone.View.extend({
         this.$("table").DataTable();
     },
     seleccionarFila(event) {
+        // Recuperar la fila (tr) seleccionada del evento
         const tr = event.currentTarget;
+        // Recuperar su atributo id de usuario (data-id)
         const id = tr.dataset.id;
         console.log("Se seleccionó el producto", id);
+        // Recuperar el producto de la colección mediante su id
+        const producto = this.collection.get(id);
+        // Copiamos los atributos del producto seleccionado en
+        // el modelo de selección (this.model -> productoSeleccionado)
+        this.model.set(producto.toJSON());
+        // Nota: Agregamos un atributo falso para que piense
+        // el modelo de selección que ha cambiado aunque
+        // se trate del mismo modelo
+        this.model.set("token", Math.random().toString(32).slice(2));
     }
 });

@@ -40,14 +40,17 @@ module.exports = Backbone.View.extend({
     initialize() {
         this.listenTo(this.model, "change", this.render);
         document.body.appendChild(this.el);
-        this.render();
+        // this.render();
     },
     render() {
         this.$el.html(this.template(
             this.model.toJSON()
         ));
+        // Mostramos el producto
+        this.$el.show();
     },
     cerrar() {
-        this.remove();
+        // Ocultamos el producto
+        this.$el.hide();
     }
 });
