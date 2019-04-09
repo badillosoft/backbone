@@ -1,8 +1,12 @@
 const Productos = require("./colecciones/Productos");
+
 const Producto = require("./modelos/Producto");
+const Estadisticos = require("./modelos/Estadisticos");
+
 const TarjetaProducto = require("./vistas/TarjetaProducto");
 const TablaProductos = require("./vistas/TablaProductos");
 const EstadisticosProductos = require("./vistas/EstadisticosProductos");
+const GraficaEtiquetas = require("./vistas/GraficaEtiquetas");
 
 // Creamos el modelo de producto Seleccionado
 const productoSeleccionado = new Producto();
@@ -25,7 +29,14 @@ new TablaProductos({
     model: productoSeleccionado
 });
 
+const estadisticos = new Estadisticos();
+
 new EstadisticosProductos({
     el: "#izquierda",
-    collection: productos
+    collection: productos,
+    model: estadisticos
+});
+
+new GraficaEtiquetas({
+    model: estadisticos
 });
