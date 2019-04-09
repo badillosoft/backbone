@@ -1,67 +1,111 @@
 module.exports = Backbone.View.extend({
     template: _.template(`
-        <table class="display">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Precio</th>
-                    <th>Costo</th>
-                    <th>Existencias</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (let producto of productos) { %>
-                    <tr data-id="<%= producto.get("id") %>">
-                        <td class="details-control"><%= producto.get("id") %></td>
-                        <td><%= producto.get("nombre") %></td>
-                        <td><%= producto.get("descripcion") %></td>
-                        <td><%= producto.get("precio") %></td>
-                        <td><%= producto.get("costo") %></td>
-                        <td><%= producto.get("existencias") %></td>
-                    </tr>
-                <% } %>
-            </tbody>
-        </table>
         <style>
             tr {
                 cursor: pointer;
             }
+            tr.suficiente {
+                color: green;
+            }
+            tr.riesgo {
+                color: orange;
+            }
+            tr.insuficiente {
+                color: red;
+            }
+            tr.agotado {
+                color: purple;
+            }
+            td.details-control {
+                background: url('https://cdn.rawgit.com/DataTables/DataTables/6c7ada53ebc228ea9bc28b1b216e793b1825d188/examples/resources/details_open.png') no-repeat center center;
+                cursor: pointer;
+            }
+            tr.shown td.details-control {
+                background: url('https://cdn.rawgit.com/DataTables/DataTables/6c7ada53ebc228ea9bc28b1b216e793b1825d188/examples/resources/details_close.png') no-repeat center center;
+            }
         </style>
+        <table class="display" style="width: 100%"></table>
     `),
     events: {
-        "click td a": "seleccionarFila",
+        "click .seleccionar-fila": "seleccionarFila",
     },
     initialize() {
         this.listenTo(this.collection, "update", this.render);
         this.render();
     },
     render() {
-        this.$el.html(this.template({
-            productos: this.collection.toArray()
-        }));
-        
-        const table = this.$("table").DataTable();
+        // Compilamos la plantilla
+        this.$el.html(this.template());
 
-        function format ( d ) {
-            // `d` is the original data object for the row
-            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-                '<tr>'+
-                    '<td>Nombre:</td>'+
-                    '<td>'+d[1]+'</td>'+
-                '</tr>'+
-                '<tr>'+
-                    '<td>Existencias:</td>'+
-                    '<td>'+d[2]+'</td>'+
-                '</tr>'+
-                '<tr>'+
-                    '<td>Mostrar tarjeta</td>'+
-                    '<td><a data-id="'+ d[0] +'">Ver tarjeta</a></td>'+
-                '</tr>'+
-            '</table>';
+        // Creamos la tabla y definimos el contenido de la tabla
+        // a partir de los datos de la colección
+        const table = this.$("table").DataTable({
+            scrollX: true,
+            data: this.collection.toArray().map(producto => {
+                return producto.toJSON();
+            }).map(producto => {
+                producto.estatusExistencias = "Suficiente";
+                if (producto.existencias === 0) {
+                    producto.estatusExistencias = "Agotado";
+                } else if (producto.existencias < 10) {
+                    producto.estatusExistencias = "Insuficiente";
+                } else if (producto.existencias < 100) {
+                    producto.estatusExistencias = "Riesgo";
+                } 
+                return producto;
+            }),
+            columns: [
+                {
+                    "className": 'details-control',
+                    "title": "Detalles",
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": ''
+                },
+                {
+                    title: "Id",
+                    data: "id"
+                },
+                {
+                    title: "Nombre",
+                    data: "nombre"
+                },
+                {
+                    title: "Precio",
+                    data: "precio"
+                },
+                {
+                    title: "Costo",
+                    data: "costo"
+                },
+                {
+                    title: "Existencias",
+                    data: "existencias"
+                },
+                {
+                    title: "Estatus Existencias",
+                    data: "estatusExistencias"
+                },
+            ]
+        });
+
+        // Definimos el formato para los campos ocultos
+        function format ( producto ) {
+            return  `
+                <table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+                    <tr>
+                        <td>Descripción:</td>
+                        <td>${producto.descripcion}</td>
+                    </tr>
+                    <tr>
+                        <td>Mostrar tarjeta</td>
+                        <td><a class="seleccionar-fila" data-id="${producto.id}">Ver tarjeta</a></td>
+                    </tr>
+                </table>
+            `;
         }
 
+        // Se pintan los datos ocultos al darle click a la columna de detalles
         this.$("table").on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = table.row( tr );
@@ -79,12 +123,19 @@ module.exports = Backbone.View.extend({
             }
         } );
 
+        table.rows().iterator('row', function(context, index){
+            const tr = table.row(index).node();
+            const producto = table.row(index).data();
+            
+            $(tr).addClass(producto.estatusExistencias.toLowerCase());
+        });
+
     },
     seleccionarFila(event) {
-        // Recuperar la fila (tr) seleccionada del evento
-        const tr = event.currentTarget;
+        // Recuperar la fila (.seleccionar-fila) seleccionada del evento
+        const target = event.currentTarget;
         // Recuperar su atributo id de usuario (data-id)
-        const id = tr.dataset.id;
+        const id = target.dataset.id;
         console.log("Se seleccionó el producto", id);
         // Recuperar el producto de la colección mediante su id
         const producto = this.collection.get(id);

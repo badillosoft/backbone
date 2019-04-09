@@ -49,7 +49,7 @@ const productos = [
         descripcion: "Panque Gansito Mini",
         precio: 7.5,
         costo: 5.5,
-        existencias: 20,
+        existencias: 0,
         etiquetas: ["pan", "marinela", "chocolate"]
     },
 ];
