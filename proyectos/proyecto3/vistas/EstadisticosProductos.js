@@ -33,6 +33,47 @@ module.exports = Backbone.View.extend({
             return etiquetas;
         }, {});
 
+        for (let categoria in etiquetas) {
+            let productos = this.collection.select(producto => {
+                return producto.get("etiquetas").indexOf(categoria) >= 0;
+            });
+
+            const total = productos.length;
+            const precioSuma = productos.reduce((suma, producto) => suma + producto.get("precio"), 0);
+            const precioPromedio = precioSuma / total;
+            const precioSuma2 = productos.reduce((suma, producto) => suma + (producto.get("precio") - precioPromedio) ** 2, 0);
+            const precioVarianza = total <= 1 ? 0 : precioSuma2 / (total - 1);
+            const precioDesviacion = precioVarianza ** 0.5;
+            const precioMin = productos.reduce((min, producto) => producto.get("precio") < min ? producto.get("precio") : min, Infinity);
+            const precioMax = productos.reduce((max, producto) => producto.get("precio") > max ? producto.get("precio") : max, -Infinity);
+            const precioMin68 = precioPromedio - precioDesviacion;
+            const precioMax68 = precioPromedio + precioDesviacion;
+            const precioMin95 = precioPromedio - 2 * precioDesviacion;
+            const precioMax95 = precioPromedio + 2 * precioDesviacion;
+            const precioMin99 = precioPromedio - 3 * precioDesviacion;
+            const precioMax99 = precioPromedio + 3 * precioDesviacion;
+
+            let indicadores = {
+                total: total,
+                precio: {
+                    suma: precioSuma,
+                    suma2: precioSuma2,
+                    promedio: precioPromedio,
+                    varianza: precioVarianza,
+                    desviacion: precioDesviacion,
+                    min: precioMin,
+                    max: precioMax,
+                    min68: precioMin68,
+                    max68: precioMax68,
+                    min95: precioMin95,
+                    max95: precioMax95,
+                    min99: precioMin99,
+                    max99: precioMax99,
+                }
+            }
+            console.log(categoria, indicadores);
+        }
+
         this.$el.html(this.template({
             total: this.collection.length,
             etiquetas: etiquetas

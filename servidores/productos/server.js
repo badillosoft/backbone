@@ -54,16 +54,24 @@ const productos = [
     },
 ];
 
+const categorias = ["refresco", "chocolate", "pan", "galleta", "dulce"];
+
 for (let i = 0; i < 100; i++) {
-    let precio = Math.random() * 900 + 100;
+    let precio = Math.random() * 18 + 2;
     let producto = {
         id: `producto-aleatorio-${i}`,
         nombre: `Producto ${i}`,
         descripcion: `Este es un producto falso con id ${i}`,
-        precio: precio.toFixed(1),
-        costo: (precio * (Math.random() * 0.3 + 0.6)).toFixed(1),
+        precio: Number(precio.toFixed(1)),
+        costo: Number((precio * (Math.random() * 0.3 + 0.6)).toFixed(1)),
         existencias: Math.floor(Math.random() * 1000),
-        etiquetas: ["producto", "aleatorio"]
+        etiquetas: [
+            "producto",
+            "aleatorio",
+            categorias[Math.floor(Math.random() * categorias.length)],
+            categorias[Math.floor(Math.random() * categorias.length)],
+            categorias[Math.floor(Math.random() * categorias.length)],
+        ]
     };
     productos.push(producto);
 }
