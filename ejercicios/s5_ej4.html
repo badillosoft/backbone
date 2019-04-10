@@ -12,10 +12,10 @@
 <body>
     <script>
         // 1. TODO: Crear una colección llamada Cupcakes con la siguiente configuración:
-            // url: "http://10.0.18.33:3000/cupcakes"
+            // url: "http://10.0.18.33:3000/api/cupcakes"
             // * const Cupcakes = Backbone.Collection.extend( { url: "..." } )
         // 2. TODO: Crear una instancia a la colección llamada listaCupcakes
-            // * const listaCupcakes = new Cupcakes();
+            // * const listaCupcakes = new Cupcakes()
         // 3. TODO: Crear una vista llama ListaCupcakes con la vista adecuada para mostrar los cupcakes
             // * template: _.template(`
             //              <ul>
@@ -40,6 +40,78 @@
             // * const listaCupcakes = new ListaCupcakes({ collection: listaCupcakes })
         // 7. TODO: Hacerle un fetch a la colección instanciada listaCupcakes del TODO(2)
             // * listaCupcakes.fetch()
+
+        // 1.
+        const Cupcakes = Backbone.Collection.extend({
+            url: "http://10.0.18.33:3000/api/cupcakes"
+        });
+
+        // 2.
+        const listaCupcakes = new Cupcakes();
+
+        // 3.
+        const ListaCupcakesVista = Backbone.View.extend({
+            template: _.template(`
+                <ul>
+                    <% for (let cupcake of cupcakes) { %>
+                        <li>
+                            <%= cupcake.get("nombre") %> 
+                            ($<%= cupcake.get("precio").toFixed(2) %>)
+                        </li>
+                    <% } %>
+                </ul>
+            `),
+            // 4.
+            initialize() {
+                this.listenTo(this.collection, "update", this.render);
+                document.body.appendChild(this.el);
+            },
+            // 5.
+            render() {
+                this.$el.html( this.template({
+                    cupcakes: this.collection.toArray()
+                }));
+            }
+        });
+
+        // 6.
+        const listaCupcakesVista = new ListaCupcakesVista({
+            collection: listaCupcakes
+        });
+
+        // 7.
+        listaCupcakes.fetch();
+
+        // 8. TODO: Crear el modelo Cupcake sobre la misma url, pero usando `urlRoot`
+            // utilzar como id el atributo `_id` mediante `idAttribute`
+            // * const Cupcake = Backbone.Model.extend({ urlRoot: "...", idAttribute: "_id" })
+        // 9. TODO: Crear la vista AgregarCupcakeVista con la plantilla necesaria para lograrlo
+            // * template: _.template(`
+            //     <input name="nombre" placeholder="Nombre">
+            //     <input name="precio" type="number" placeholder="Precio">
+            //     <button>Agregar</button>
+            // `)
+        // 10. TODO: Agregar el método _initialize_ y _render_ para mostrar la plantilla
+        // 11. TODO: Agregar el evento click para controlar al botón y mandar a llamar al método agregar
+            // * events: { "click button": "agregar" }
+        // 12. TODO: Agregar el método _agregar_ y dentro de él recuperar los valores de los inputs
+            // * const nombre = this.$("[name='nombre']").val()
+            // * const precio = this.$("[name='precio']").val()
+        // 13. TODO: En el método _agregar_ ajustar los atributos `nombre` y `precio` en el modelo asociado
+            // * this.model({ "nombre", "precio" })
+        // 14. TODO: Crear una instancia del modelo Cupcake llamado cupcakeTemporal para asociarlo a la vista
+            // * const cupcakeTemporal = new Cupcake()
+        // 15. TODO: Crear una instancia de la vista AgregarCupcakeVista como agregarCupcakeVista
+            // y asociar el modelo cupcakeTemporal
+            // * const agregarCupcakeVista = new AgregarCupcakeVista({ model: cupcakeTemporal })
+        // 16. TODO: Escuchar el evento `change` de cupcakeTemporal mediante el método _on_
+            // y guardar el modelo.
+            // cupcakeTemporal.on("change", () => { cupcakeTemporal.save(); })
+        // 17. TODO: Del método _on_ del TODO(16) añadir el método _clear_ para borrar el cupcake
+            // * { cupcakeTemporal.save(); cupcakeTemporal.clear() }
+        // 18. TODO: En la vista AgregarCupcakeVista del TODO(9) en el método _initialize_ escuchar al modelo
+            // cupcakeTemporal para reiniciar la vista con _render_
+            // * this.listenTo(this.model, "change", this.render)
     </script>
 </body>
 </html>
