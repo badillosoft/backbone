@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sesión 5 - Ejercicio 4</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <script>
+        // 1. TODO: Crear una colección llamada Cupcakes con la siguiente configuración:
+            // url: "http://10.0.18.33:3000/cupcakes"
+            // * const Cupcakes = Backbone.Collection.extend( { url: "..." } )
+        // 2. TODO: Crear una instancia a la colección llamada listaCupcakes
+            // * const listaCupcakes = new Cupcakes();
+        // 3. TODO: Crear una vista llama ListaCupcakes con la vista adecuada para mostrar los cupcakes
+            // * template: _.template(`
+            //              <ul>
+            //                  <% for (let cupcake of cupcakes) { %>
+            //                      <li>
+            //                          <%= cupcake.get("nombre") %> 
+            //                          ($<%= cupcake.get("precio").toFixed(2) %>)
+            //                      </li>
+            //                  <% } %>
+            //              </ul>
+            //          `)
+        // 4. TODO: Agregar a la vista ListaCupcakes el método _initialize_
+            // que escuche los eventos de la colección asociada y mande a llamar a render
+            // * this.listenTo( this.collection, "update", this.render )
+            // También montar la vista sobre `body`
+            // * document.body.appendChild( this.el )
+        // 5. TODO: Agregar el método _render_ que mande a pintar la lista de cupcakes
+            // extraídos desde la colección asociadas con la plantilla bien configurada
+            // * this.$el.html( this.template( { cupcakes: this.collection.toArray() } ) )
+        // 6. TODO: Crear una instancia de la vista llamada listaCupcakesVista que esté enlazada
+            // a la colección instanciada listaCupcakes del TODO(2)
+            // * const listaCupcakes = new ListaCupcakes({ collection: listaCupcakes })
+        // 7. TODO: Hacerle un fetch a la colección instanciada listaCupcakes del TODO(2)
+            // * listaCupcakes.fetch()
+    </script>
+</body>
+</html>
