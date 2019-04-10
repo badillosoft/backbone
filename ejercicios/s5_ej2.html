@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sesión 5 - Ejercicio 2</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <script>
+        // Event
+            // - on/once (event, callback) # ejecuta el <callback> cuándo se genera el evento <event>
+                // Los eventos más importantes del modelo son:
+                // > `all` escucha todos los eventos del modelo
+                // > `change` que escucha cualquier cambio en el modelo
+                // > `change:attribute` escucha cuándo cambia el atributo `attribute`
+            // - off ([event], [callback]) # deja de escucha el <callback> si se define o todos los callbacks
+                // en <event> si se define o todos los callbacks de todos los eventos si no se define nada
+            // - trigger (event, ...data) # dispara el evento <event> con los datos <...data>
+            // - listenTo/listenToOnce (handler, event, callback) # el controlador de eventos <handler>
+                // que puede ser un modelo, una vista, una collección o una ruta escucha cuándo se genera 
+                // el evento <event> y ejecuta el <callback>.
+                // Es equivalente a decir <handler>.on(event, callback), con la
+                // diferencia de que cuándo el que escucha (this.listenTo) cuándo es destruido quita
+                // automáticamente las referencias al callback, sin tener que usar _off_.
+                // Lo cual previene dejar escuchando callbacks que ya existen
+            // - stopListening ([handler], [event], [callback]) # deja de escuchar al <handler> si está definido
+                // en el evento <event> o todos los eventos en el <callback> específico o todos los callbacks
+
+
+        // Model << Event
+            // - attributes {} # contiene los atributos del modelo (que pueden ser escuchados)
+            // - defaults {} # contiene los atributos iniciales del modelo
+            // - set (key, value)/(obj) # ajusta el atributo de nombre <key> con el valor <value>
+                // en caso de recibir <obj> ajusta todos los atributos [<key>]: [<value>] extraídos del objeto
+                // * model.set("a", 123) / model.set({ a: 123, b: 456 })
+                // Si no existen los atributos los crea, sino los reemplaza.
+                // Cuándo un atributo cambia se dipara el evento `change` y `change:<key>`
+                // Para forzar a cambiar el modelo podemos decir model.set("last_update", new Date())
+            // - get (key) # devuelve el valor del atributo con nombre <key>
+            // - url () # define la url desde dónde se van a extraer los datos con _sync_, _fetch_ y _save_
+            // - parse (response, options) # define una función que reestructura los datos que vienen
+                // del server antes de pasarlos a fetch.
+                // * Backbone.Model.extend({ parse(response) { return { message: "hola mundo" }; } })
+            // - fetch () # recupera los atributos del modelo desde el servidor.
+            // - save ([attributes]) # envia los datos (JSON) del modelo al servidor de dos formas:
+                // 1. Si es nuevo (no tiene id) usa la ruta principal /api/model `create`
+                // 2. Si no es nuevo (ya tiene id) usa la ruta de actualización /api/model/<id> `update`
+            // - destroy () # deja de escuchar todo, notifica que dejen de escucharlo y quita elimina el modelo
+
+        // Definimos un modelo con atributos y funcionalidad por defecto 
+        const Model = Backbone.Model.extend({
+            // attributes: { nombre, edad }
+            defaults: {
+                nombre: "Anónimo",
+                edad: 18
+            },
+            saludar() {
+                console.log(`
+                    Hola soy ${this.get("nombre")} y tengo ${this.get("edad")} años
+                `);
+            }
+        });
+
+        // Creamos una instancia del modelo con sus propios atributos independientes de otros modelos
+        const model = new Model({
+            nombre: "Pepe" // Reemplaza el atributo por defecto, sino existe lo crea
+        });
+
+        // Usamos la funcionalidad del modelo que accede a los atributos propios de la instancia
+        model.saludar();
+    </script>
+</body>
+</html>

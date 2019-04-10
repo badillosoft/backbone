@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Demos</title>
+</head>
+<body>
+    <script>
+        {} []
+        
+        const a = {
+            nombre: "a",
+            edad: 123,
+            direccion: {
+                calle: "123"
+            },
+            tags: ["x", "y", "z"],
+            amigos: [
+                {
+                    id: 23,
+                    visible: true
+                }
+            ],
+            saludar: function () {
+                console.log(this.nombre);
+            },
+            saludar2: () => {
+                console.log(this.nombre); // ERROR THIS NO EXISTE EN LAS FLECHAS
+            }
+        }
+    </script>
+</body>
+</html>

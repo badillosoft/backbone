@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sesión 5 - Ejercicio 3</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.paginator/2.0.8/backbone.paginator.js"></script>
+</head>
+<body>
+    <script>
+        // Sincronizar un modelo al servidor restful
+
+        // 1. Definir en el modelo `urlRoot` con la ruta principal para guardar los modelos
+        // 2. Establecer el atributo de <id> que será utilizado por el servidor
+        // 3. Crear una instancia del modelo 
+
+        const Cupcake = Backbone.Model.extend({
+            urlRoot: "http://10.0.18.33:3000/api/cupcakes",
+            idAttribute: "_id"
+        });
+
+        // Crea un nuevo cupcake en el servidor
+
+        const cupcake = new Cupcake({
+            nombre: "chocolate",
+            precio: Math.random() * 100
+        });
+
+        cupcake.on("change", () => {
+            console.log("cupcake", cupcake.toJSON());
+        });
+
+        // cupcake no tiene _id entonces llamaría al API en:
+        // POST /api/cupcakes
+        cupcake.save();
+
+        // Actualiza el cupcake en el servidor
+
+        const cupcake_1 = new Cupcake({
+            _id: "choco-1",
+            nombre: "chocolate",
+            precio: Math.random() * 100
+        });
+
+        cupcake_1.on("change", () => {
+            console.log("cupcake_1", cupcake_1.toJSON());
+        });
+
+        // cupcake_1 si tiene _id entonces llamaría al API en:
+        // PUT /api/cupcakes/choco-1
+        cupcake_1.save();
+
+        // Recupera el cupcake del servidor
+
+        const cupcake_2 = new Cupcake({
+            _id: "hrikbkphvu8"
+        });
+
+        cupcake_2.on("change", () => {
+            console.log("cupcake_2", cupcake_2.toJSON());
+        });
+
+        // cupcake_2 si tiene _id entonces llamaría al API en:
+        // GET /api/cupcakes/hrikbkphvu8
+        cupcake_2.fetch();
+
+        const Cupcakes = Backbone.Collection.extend({
+            url: "http://10.0.18.33:3000/api/cupcakes"
+        });
+
+        const cupcakes = new Cupcakes();
+
+        cupcakes.on("update", () => {
+            console.log("cupcakes", cupcakes.toArray().map(c => c.toJSON()));
+        });
+
+        cupcakes.fetch();
+
+        // https://github.com/backbone-paginator/backbone.paginator
+        console.log(Backbone.PageableCollection);
+    </script>
+</body>
+</html>

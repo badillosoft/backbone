@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sesión 5 - Ejercicio 1</title>
+</head>
+<body>
+    <script>
+        // Tipos de datos
+        // Number
+        // String
+        // Boolean
+        // Null
+        // Undefined -> JSON IGNORA
+        // Array
+        // Object
+        // Function -> NO JSON
+        // ES6: Class === Function
+
+        // Objeto en Javascript
+        // { <key>: <value> }
+        // { nombre: "manzana", color: "roja" }
+        // { a: 123, b: false, c: { x: 1, y: 2 } }
+        // { r: 4, s: [ 1, 5, 7 ] }
+        // { p: [ { id: 1, n: "abc" }, { id: 2, n: "xyz" } ] }
+        
+        const frutaObj = {
+            attributes: {
+                nombre: "manzana",
+                color: "roja",
+                x: Promise.resolve(),
+                // fruta: this // No es serializable
+            },
+            saludar() {
+                alert(`
+                    Hola soy una ${this.attributes.nombre}, 
+                    de color ${this.attributes.color}
+                `);
+            },
+            // saludar: function () {
+            //     alert(`
+            //         Hola soy una ${this.attributes.nombre}, 
+            //         de color ${this.attributes.color}
+            //     `);
+            // }
+        };
+
+        frutaObj.saludar();
+
+        frutaObj.attributes.nombre = "pera";
+
+        frutaObj.saludar();
+
+        delete frutaObj.attributes.nombre;
+
+        frutaObj.saludar();
+
+        // console.log(JSON.stringify(frutaObj));
+    </script>
+</body>
+</html>
