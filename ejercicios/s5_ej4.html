@@ -113,6 +113,51 @@
             // cupcakeTemporal para reiniciar la vista con _render_
             // * this.listenTo(this.model, "change", this.render)
         // 19. TODO: Si lo desea puede agregar en el callback del TODO(16) un fetch a la collección como TODO(7)
+
+        const Cupcake = Backbone.Model.extend({
+            urlRoot: "http://10.0.18.33:3000/api/cupcakes",
+            idAttribute: "_id"
+        });
+
+        const AgregarCupcakeVista = Backbone.View.extend({
+            template: _.template(`
+                <input name="nombre" placeholder="Nombre">
+                <input name="precio" type="number" placeholder="Precio">
+                <button>Agregar</button>
+            `),
+            events: {
+                "click button": "agregar"
+            },
+            initialize() {
+                this.listenTo(this.model, "change", this.render);
+                document.body.appendChild(this.el);
+                this.render();
+            },
+            render() {
+                this.$el.html( this.template());
+            },
+            async agregar() {
+                const nombre = this.$("[name='nombre']").val();
+                const precio = Number(this.$("[name='precio']").val());
+                await this.model.set({
+                    nombre,
+                    precio
+                });
+                console.log(this.model.toJSON());
+                await cupcakeTemporal.save();
+                cupcakeTemporal.clear();
+            }
+        });
+
+        const cupcakeTemporal = new Cupcake();
+
+        const agregarCupcakeVista = new AgregarCupcakeVista({
+            model: cupcakeTemporal
+        });
+
+        cupcakeTemporal.on("change", () => {
+            listaCupcakes.fetch();
+        });
     </script>
 </body>
 </html>
