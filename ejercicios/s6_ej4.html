@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sesión 6 - Ejercicio 4</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+        }
+        .app {
+            display: flex;
+            height: 100%;
+        }
+        .menu {
+            width: 250px;
+            background-color: rgb(44, 111, 236);
+            color: white;
+            padding: 20px;
+        }
+        .menu a {
+            width: 100%;
+            text-decoration: none;
+            color: white;
+            padding: 10px;
+            padding-left: 20px;
+        }
+        .menu span {
+            width: 100%;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+        }
+        .menu li {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            list-style: none;
+        }
+        .menu li:hover {
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .contenedor {
+            width: calc(100% - 250px);
+            background-color: whitesmoke;
+        }
+        .panel {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 1. TODO: Crear un menu de navegación con dos opciones: Inicio | Buscar Usuario
+        // 2. TODO: Establercer dos paneles para mostrar las dos vistas de navegación
+        // 3. TODO: Crear el router que muestre las dos vistas de navegación
+        // 4. TODO: Crear la colección Usuarios extrayendo los datos de
+            // > https://randomuser.me/api/?results=10&seed=backbone
+            // Ajustar el formato de datos similar a 
+            // {
+            //     nombre: "<name.first> <name.last>",
+            //     correo: "<email>",
+            //     genero: "<gender>",
+            //     edad: "<dob.age>",
+            //     telefono: "<cell>",
+            //     foto: "<picture.medium>"
+            // }
+            // > Nota: Utiliza la función parse en la colección para reformatear los datos
+        // 5. TODO: Crear el modelo Usuario que contenga los datos de la colección
+        // 6. TODO: Crear una instancia de la colección llamada listaUsuarios
+        // 7. TODO: Crear una instancia del modelo llamado usuarioTemporal
+        // 8. TODO: Crear una vista llamada ListaUsuariosVista y asociarla a la colección
+            // mostar todos los usuarios de forma adecuada
+        // 9. TODO: Crear una vista llamada BuscarUsuarioVista y asociarla a la  colección
+            // y al modelo temporal, buscar en la colección el usuario de la caja de búsqueda
+            // y mostrarlo en una tarjeta con su foto y demás atributos
+        // 10. TODO: Crear una instancia de ambas vistas con el elemento dónde serán colocados
+            // y la referencia a la colección y el modelo.
+        // 11. TODO: Hacer el fetch y demás para que funcionen las vistas.
+
+    </script>
+</body>
+</html>
