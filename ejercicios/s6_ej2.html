@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sesión 6 - Ejercicio 1</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <a href="#inicio">ir a inicio</a>
+    <a href="#imagen">ir a imagen</a>
+    <a href="#input">ir a input</a>
+    <a href="#boton">ir a boton</a>
+    <a href="#panel1">ir a panel1</a>
+    <a href="#empleados">ir a empleados</a>
+    <a href="#productos/1">ir a producto 1</a>
+    <a href="#productos/2">ir a producto 2</a>
+    <a href="#productos/3">ir a producto 3</a>
+
+    <script>
+        const Router = Backbone.Router.extend({
+            routes: {
+                "inicio": "home", // #inicio -> route:home
+                "imagen": "image", // #imagen -> route:image
+                "productos/:id": "products", // #producto/<id> -> route:product
+
+            }
+        });
+
+        const router = new Router();
+
+        router.on("route", (name) => {
+            console.log("route", name);
+        });
+
+        router.on("route:home", () => {
+            alert("Bienvenido");
+        });
+
+        router.on("route:products", (id) => {
+            alert(`producto seleccionado: ${id}`);
+        });
+
+        setTimeout(() => {
+            router.navigate("inicio", { trigger: true });
+        }, 5000);
+
+        Backbone.history.start();
+    </script>
+</body>
+</html>
