@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sesión 6 - Ejercicio 5</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+</head>
+<body>
+    <script>
+        // Modelos
+        const Usuario = Backbone.Model.extend({
+            // urlRoot: "http://mi-emprea.com/api/usuarios",
+            idAttribute: "id_usuario",
+            defaults: {
+                id_usuario: null,
+                credenciales: [],
+                perfiles: [],
+                nombre: null, // "John Doe"
+                correo: null, // "jonh@correo.com"
+            }
+        });
+        const Credencial = Backbone.Model.extend({
+            idAttribute: "id_credencial",
+            defaults: {
+                id_credencial: null,
+                id_usuario: null,
+                tipo: "correo",
+                // correo: correo+contraseña
+                // facebook: apiFacebook+secretFacebook
+                // google: apiGoogle+secretGoogle+tokenGoogle
+                // * correo: "john@gmail.com"
+                // * contraseña: "john123"
+            }
+        });
+        const Perfil = Backbone.Model.extend({
+            idAttribute: "id_perfil",
+            defaults: {
+                id_perfil: null,
+                roles: [],
+                nombre: null, // "Administrador"
+            }
+        });
+        const Rol = Backbone.Model.extend({
+            idAttribute: "id_rol",
+            defaults: {
+                id_rol: null,
+                id_perfil: null,
+                nombre: null, // "Consultar Ventas"
+                permisos: [], // ["vista:inicio", "vista:ventas", "detalles:ventas"]
+            }
+        });
+
+        // Colecciones
+        const Usuarios = Backbone.Collection.extend();
+        const Credenciales = Backbone.Collection.extend();
+        const Perfiles = Backbone.Collection.extend();
+        const Roles = Backbone.Collection.extend();
+
+        // Instancias
+        const usuarios = new Usuarios([
+            new Usuario({
+                id_usuario: "ana",
+                credenciales: ["ana_correo", "ana_facebook"],
+                perfiles: ["padministrador"],
+                nombre: "Ana",
+                correo: "ana@hotmail.com",
+            }),
+            new Usuario({
+                id_usuario: "beto",
+                credenciales: ["beto_correo"],
+                perfiles: ["pventas"],
+                nombre: "Beto",
+                correo: "beto@gmail.com",
+            }),
+            new Usuario({
+                id_usuario: "carla",
+                credenciales: ["carla_facebook"],
+                perfiles: ["pinventario"],
+                nombre: "Carla",
+                correo: "carla@yahoo.com",
+            }),
+        ]);
+        const credenciales = new Credenciales([
+            new Credencial({
+                id_credencial: "ana_correo",
+                id_usuario: "ana",
+                tipo: "correo",
+                correo: "ana21@empresa.com",
+                contraseña: "ana21"
+            }),
+            new Credencial({
+                id_credencial: "beto_correo",
+                id_usuario: "beto",
+                tipo: "correo",
+                correo: "beto33@empresa.com",
+                contraseña: "beto33"
+            }),
+            new Credencial({
+                id_credencial: "carla_facebook",
+                id_usuario: "carla",
+                tipo: "facebook",
+                token: "ACB123"
+            }),
+            new Credencial({
+                id_credencial: "ana_facebook",
+                id_usuario: "ana",
+                tipo: "facebook",
+                token: "GHT456"
+            }),
+        ]);
+        const perfiles = new Perfiles([
+            new Perfil({
+                id_perfil: "padministrador",
+                roles: ["rventas", "rinventario"],
+                nombre: "Administrador"
+            }),
+            new Perfil({
+                id_perfil: "pventas",
+                roles: ["rventas"],
+                nombre: "Ventas"
+            }),
+            new Perfil({
+                id_perfil: "pinventario",
+                roles: ["rinventario"],
+                nombre: "Inventario"
+            }),
+        ]);
+        const roles = new Roles([
+            new Rol({
+                id_rol: "rventas",
+                id_perfil: "pventas",
+                permisos: ["inicio", "ventas"],
+                nombre: "Rol de Ventas"
+            }),
+            new Rol({
+                id_rol: "rinventario",
+                id_perfil: "pinventario",
+                permisos: ["inventario"],
+                nombre: "Rol de Inventario"
+            }),
+        ]);
+
+        function loginCorreo(id_usuario, correo, contraseña) {
+            const usuario = usuarios.findWhere({
+                id_usuario
+            });
+
+            if (!usuario) {
+                alert(`El usuario no existe: ${id_usuario}`);
+                return;
+            }
+
+            const correosUsuario = credenciales.where({
+                id_usuario,
+                tipo: "correo"
+            });
+
+            const correoUsuario = correosUsuario.filter(correoUsuario => {
+                return correoUsuario.get("correo") === correo && 
+                    correoUsuario.get("contraseña") === contraseña;
+            })[0];
+
+            if (!correoUsuario) {
+                alert(`No se puede iniciar sesión: ${id_usuario}`);
+                return;
+            }
+
+            alert(`Sesión iniciada: ${id_usuario}`);
+        }
+
+        function checarPermiso(id_usuario, permiso) {
+            const usuario = usuarios.findWhere({
+                id_usuario
+            });
+
+            if (!usuario) {
+                alert(`El usuario no existe: ${id_usuario}`);
+                return;
+            }
+
+            console.log(usuario.get("perfiles"));
+
+            for (let id_perfil of usuario.get("perfiles")) {
+                let perfilesUsuario = perfiles.where({ id_perfil });
+    
+                console.log(perfilesUsuario);
+    
+                let permisosUsuario = perfilesUsuario.map(perfil => {
+                    return perfil.get("roles").map(id_rol => {
+                        return roles.where({ id_rol });
+                    });  
+                }).reduce((p, c) => [...p, ...c], []).reduce((p, c) => [...p, ...c], []).map(rol => {
+                    return rol.get("permisos");
+                }).reduce((p, c) => [...p, ...c], []);
+    
+                console.log(permisosUsuario);
+
+                return permisosUsuario.indexOf(permiso) >= 0;
+            }
+
+        }
+
+        // loginCorreo("ana", "ana21@empresa.com", "ana21");
+
+        if (checarPermiso("beto", "inventario")) {
+            alert("Si tiene permiso");
+        } else {
+            alert("No tiene permiso");
+        }
+    </script>
+</body>
+</html>

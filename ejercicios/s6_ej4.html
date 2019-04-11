@@ -89,6 +89,41 @@
             // y la referencia a la colección y el modelo.
         // 11. TODO: Hacer el fetch y demás para que funcionen las vistas.
 
+        const Usuarios = Backbone.Collection.extend({
+            url: "https://randomuser.me/api/?results=10&seed=backbone",
+            parse(response) {
+                // console.log(response.results);
+                return response.results.map(data => {
+                    return {
+                        nombre: `${data.name.first} ${data.name.last}`,
+                        genero: data.gender === "female" ? "mujer" : "hombre",
+                        // ...
+                    };
+                }); // map(v, T) => v' | vi' = T(vi)
+            }
+        });
+
+        const usuarios = new Usuarios();
+
+        usuarios.on("update", () => {
+            console.log(usuarios.toArray());
+
+            const query = "Hombre";
+
+            const result = usuarios.filter(usuario => {
+                const r1 = usuario.get("nombre").toLowerCase().search(query.toLowerCase()) >= 0;
+                const r2 = usuario.get("genero").toLowerCase().search(query.toLowerCase()) >= 0;
+                return r1 || r2;
+            });
+
+            // const result = usuarios.where({
+            //     genero: query
+            // });
+
+            console.log(result);
+        });
+
+        usuarios.fetch();
     </script>
 </body>
 </html>
