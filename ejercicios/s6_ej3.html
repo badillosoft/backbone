@@ -28,13 +28,23 @@
             padding: 20px;
         }
         .menu a {
+            width: 100%;
             text-decoration: none;
             color: white;
-        }
-        .menu li {
-            list-style: none;
             padding: 10px;
             padding-left: 20px;
+        }
+        .menu span {
+            width: 100%;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+        }
+        .menu li {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            list-style: none;
         }
         .menu li:hover {
             cursor: pointer;
@@ -52,7 +62,7 @@
             <ul>
                 <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#galeria">Galería</a></li>
-                <li>Productos
+                <li><span>Productos</span>
                     <ul>
                         <li><a href="#producto/agregar">Agregar</a></li>
                         <li><a href="#producto/todos">Ver Todos</a></li>
@@ -62,8 +72,42 @@
             </ul>
         </div>
         <div class="contenedor">
-
+            <div class="panel" id="inicio">
+                <h1>Bienvenido</h1>
+            </div>
+            <div class="panel" id="galeria" hidden>
+                <h1>Galería</h1>
+            </div>
+            <div class="panel" id="producto-agregar" hidden>
+                <h1>Agregar Producto</h1>
+            </div>
+            <div class="panel" id="producto-todos" hidden>
+                <h1>Todos los produtos Producto</h1>
+            </div>
+            <div class="panel" id="producto-buscar" hidden>
+                <h1>Buscar Producto</h1>
+            </div>
         </div>
+        <script>
+            const Router = Backbone.Router.extend({
+                routes: {
+                    "inicio": "inicio",
+                    "galeria": "galeria",
+                    "producto/agregar": "producto-agregar",
+                    "producto/todos": "producto-todos",
+                    "producto/buscar": "producto-buscar",
+                }
+            });
+
+            const router = new Router();
+
+            router.on("route", name => {
+                $(".panel").hide();
+                $(`#${name}`).show();
+            });
+
+            Backbone.history.start();
+        </script>
     </div>
 </body>
 </html>
